@@ -1,0 +1,315 @@
+// Abstraction:
+
+1. Create a base class Shape with abstract methods for calculating area and perimeter. 
+Implement subclasses for Circle, Rectangle, and Triangle.
+
+--> Program:
+
+abstract class Shape {
+    abstract double calculateArea();
+    abstract double calculatePerimeter();
+}
+
+class Circle extends Shape {
+    private double radius;
+
+    Circle(double radius) {
+        this.radius = radius;
+    }
+
+    @Override
+    double calculateArea() {
+        return Math.PI * radius * radius;
+    }
+
+    @Override
+    double calculatePerimeter() {
+        return 2 * Math.PI * radius;
+    }
+}
+
+class Rectangle extends Shape {
+    private double length, width;
+
+    Rectangle(double length, double width) {
+        this.length = length;
+        this.width = width;
+    }
+
+    @Override
+    double calculateArea() {
+        return length * width;
+    }
+
+    @Override
+    double calculatePerimeter() {
+        return 2 * (length + width);
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Shape circle = new Circle(5);
+        System.out.println("Circle Area: " + circle.calculateArea());
+        System.out.println("Circle Perimeter: " + circle.calculatePerimeter());
+
+        Shape rectangle = new Rectangle(4, 6);
+        System.out.println("Rectangle Area: " + rectangle.calculateArea());
+        System.out.println("Rectangle Perimeter: " + rectangle.calculatePerimeter());
+    }
+}
+
+
+--> Output:
+Circle Area: 78.53981633974483
+Circle Perimeter: 31.41592653589793
+Rectangle Area: 24.0
+Rectangle Perimeter: 20.0
+
+2. Design an abstract class BankAccount with methods for deposit, withdrawal, and checking balance. 
+Extend it for SavingsAccount and CurrentAccount.
+
+-->  Program:
+
+abstract class BankAccount {
+    protected double balance;
+
+    BankAccount(double balance) {
+        this.balance = balance;
+    }
+
+    abstract void deposit(double amount);
+    abstract void withdraw(double amount);
+
+    double getBalance() {
+        return balance;
+    }
+}
+
+class SavingsAccount extends BankAccount {
+    SavingsAccount(double balance) {
+        super(balance);
+    }
+
+    @Override
+    void deposit(double amount) {
+        balance += amount;
+    }
+
+    @Override
+    void withdraw(double amount) {
+        if (balance >= amount) {
+            balance -= amount;
+        } else {
+            System.out.println("Insufficient balance");
+        }
+    }
+}
+
+class CurrentAccount extends BankAccount {
+    private double overdraftLimit;
+
+    CurrentAccount(double balance, double overdraftLimit) {
+        super(balance);
+        this.overdraftLimit = overdraftLimit;
+    }
+
+    @Override
+    void deposit(double amount) {
+        balance += amount;
+    }
+
+    @Override
+    void withdraw(double amount) {
+        if (balance + overdraftLimit >= amount) {
+            balance -= amount;
+        } else {
+            System.out.println("Withdrawal exceeds overdraft limit");
+        }
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        BankAccount savings = new SavingsAccount(1000);
+        savings.deposit(500);
+        savings.withdraw(300);
+        System.out.println("Savings Account Balance: " + savings.getBalance());
+
+        BankAccount current = new CurrentAccount(2000, 500);
+        current.withdraw(2300);
+        System.out.println("Current Account Balance: " + current.getBalance());
+    }
+}
+
+--> Output:
+Savings Account Balance: 1200.0
+Current Account Balance: -300.0
+
+3. Create an abstract class Employee with abstract methods calculateSalary() and getDetails().
+Implement FullTimeEmployee and PartTimeEmployee.
+
+--> Program:
+
+abstract class Employee {
+    protected String name;
+
+    Employee(String name) {
+        this.name = name;
+    }
+
+    abstract double calculateSalary();
+    abstract String getDetails();
+}
+
+class FullTimeEmployee extends Employee {
+    private double monthlySalary;
+
+    FullTimeEmployee(String name, double salary) {
+        super(name);
+        this.monthlySalary = salary;
+    }
+
+    @Override
+    double calculateSalary() {
+        return monthlySalary;
+    }
+
+    @Override
+    String getDetails() {
+        return "Full-Time Employee: " + name;
+    }
+}
+
+class PartTimeEmployee extends Employee {
+    private double hourlyRate;
+    private int hoursWorked;
+
+    PartTimeEmployee(String name, double hourlyRate, int hoursWorked) {
+        super(name);
+        this.hourlyRate = hourlyRate;
+        this.hoursWorked = hoursWorked;
+    }
+
+    @Override
+    double calculateSalary() {
+        return hourlyRate * hoursWorked;
+    }
+
+    @Override
+    String getDetails() {
+        return "Part-Time Employee: " + name;
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Employee fullTime = new FullTimeEmployee("Alice", 5000);
+        System.out.println(fullTime.getDetails());
+        System.out.println("Salary: " + fullTime.calculateSalary());
+
+        Employee partTime = new PartTimeEmployee("Bob", 20, 80);
+        System.out.println(partTime.getDetails());
+        System.out.println("Salary: " + partTime.calculateSalary());
+    }
+}
+
+
+--> Output:
+Full-Time Employee: Alice
+Salary: 5000.0
+Part-Time Employee: Bob
+Salary: 1600.0
+
+
+4. Create an abstract class Payment with a method processPayment().
+Extend it for CreditCardPayment and PaypalPayment.
+
+
+--> Program:
+
+abstract class Payment {
+    abstract void processPayment(double amount);
+}
+
+class CreditCardPayment extends Payment {
+    @Override
+    void processPayment(double amount) {
+        System.out.println("Processing Credit Card Payment of $" + amount);
+    }
+}
+
+class PaypalPayment extends Payment {
+    @Override
+    void processPayment(double amount) {
+        System.out.println("Processing PayPal Payment of $" + amount);
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Payment creditCard = new CreditCardPayment();
+        creditCard.processPayment(100.50);
+
+        Payment paypal = new PaypalPayment();
+        paypal.processPayment(75.20);
+    }
+}
+
+
+--> Output:
+Processing Credit Card Payment of $100.5
+Processing PayPal Payment of $75.2
+
+5. Define an abstract class Vehicle with methods startEngine() and stopEngine(). 
+Extend it for Car and Motorcycle.
+
+
+--> Program:
+abstract class Vehicle {
+    abstract void startEngine();
+    abstract void stopEngine();
+}
+
+class Car extends Vehicle {
+    @Override
+    void startEngine() {
+        System.out.println("Car engine started.");
+    }
+
+    @Override
+    void stopEngine() {
+        System.out.println("Car engine stopped.");
+    }
+}
+
+class Motorcycle extends Vehicle {
+    @Override
+    void startEngine() {
+        System.out.println("Motorcycle engine started.");
+    }
+
+    @Override
+    void stopEngine() {
+        System.out.println("Motorcycle engine stopped.");
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Vehicle car = new Car();
+        car.startEngine();
+        car.stopEngine();
+
+        Vehicle motorcycle = new Motorcycle();
+        motorcycle.startEngine();
+        motorcycle.stopEngine();
+    }
+}
+
+
+--> Output:
+Car engine started.
+Car engine stopped.
+Motorcycle engine started.
+Motorcycle engine stopped.
